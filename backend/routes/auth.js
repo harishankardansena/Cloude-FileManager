@@ -14,10 +14,16 @@ function isMongoReady() {
 
 // ─── OAuth2 Client Factory ────────────────────────────────────────────────────
 function getOAuth2Client() {
+  const redirectUri = process.env.RENDER_EXTERNAL_URL 
+    ? `${process.env.RENDER_EXTERNAL_URL}/auth/callback`
+    : process.env.BACKEND_URL 
+      ? `${process.env.BACKEND_URL}/auth/callback`
+      : 'http://localhost:5000/auth/callback';
+
   return new google.auth.OAuth2(
     process.env.GOOGLE_WEB_CLIENT_ID,
     process.env.GOOGLE_WEB_CLIENT_SECRET,
-    'http://localhost:5000/auth/callback'
+    redirectUri
   );
 }
 
