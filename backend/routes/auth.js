@@ -47,7 +47,7 @@ router.get('/google', (req, res) => {
 // ─── GET /auth/callback — Handle OAuth Code Exchange ─────────────────────────
 router.get('/callback', async (req, res) => {
   const { code, error } = req.query;
-  const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+  const FRONTEND_URL = process.env.FRONTEND_URL || process.env.RENDER_EXTERNAL_URL || 'http://localhost:5173';
 
   if (error) {
     return res.redirect(`${FRONTEND_URL}?auth=error&reason=${error}`);
