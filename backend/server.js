@@ -85,14 +85,20 @@ async function setupSession() {
   });
 
   // ─── Serve Frontend in Production ──────────────────────────────────────────────
-  if (process.env.NODE_ENV === 'production') {
-    const path = require('path');
-    const frontendDist = path.join(__dirname, '../frontend/dist');
+  const fs = require('fs');
+  const path = require('path');
+  const frontendDist = path.join(__dirname, '../frontend/dist');
+  
+  if (fs.existsSync(frontendDist)) {
     app.use(express.static(frontendDist));
     
     // Catch-all route to serve the React app (for client-side routing)
     app.get('*', (req, res) => {
       res.sendFile(path.join(frontendDist, 'index.html'));
+    });
+  } else {
+    app.get('/', (req, res) => {
+      res.send("Backend is running, but frontend/dist was not found. Please check your build step.");
     });
   }
 
